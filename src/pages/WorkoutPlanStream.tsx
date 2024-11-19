@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { FadeIn } from "../components/Animation/FadeIn";
 import { useContext } from "react";
 import OptionsContext from "../context/OptionContext";
+import Typewriter from "../components/ui/TypeWriter";
 
 interface Exercise {
   name: string;
@@ -64,13 +65,13 @@ const WorkoutPlanComponent: React.FC = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(samplePayload),
-        },
+        }
       );
 
       if (setupResponse.ok) {
         const { session_id } = await setupResponse.json();
         const eventSource = new EventSource(
-          `http://localhost:5000/generateWorkoutPlan?session_id=${session_id}`,
+          `http://localhost:5000/generateWorkoutPlan?session_id=${session_id}`
         );
         let currentPlan: WorkoutPlan = {
           day: "",
@@ -158,8 +159,8 @@ const WorkoutPlanComponent: React.FC = () => {
     setSearchQuery(exerciseName); // store query for the "See More" button
     const response = await fetch(
       `http://localhost:5000/searchYoutubeVideos?query=${encodeURIComponent(
-        exerciseName,
-      )}`,
+        exerciseName
+      )}`
     );
     if (response.ok) {
       const videos: YoutubeVideo[] = await response.json();
@@ -236,9 +237,9 @@ const WorkoutPlanComponent: React.FC = () => {
     //     </Button>
     //   </div>
     // </div>
-    <div className="w-full max-w-screen-xl pt-16">
+    <div className="w-full max-w-screen-xl pt-16 flex">
       <FadeIn direction="none" width="100%">
-        <div className="w-full h-full">
+        <div className="w-full h-full flex flex-col justify-center">
           <div className="flex flex-col w-full items-center">
             <h1 className="text-4xl font-bold pb-6">Workout Plan</h1>
             <div className="flex flex-col items-center text-xl font-semibold mb-4">
@@ -249,11 +250,8 @@ const WorkoutPlanComponent: React.FC = () => {
               <h2>Focus: {newGoal}</h2>
             </div>
           </div>
-          <Button onClick={() => onBack()} variant="secondary">
-            Return to Start
-          </Button>
-          <div className="lg:flex-row flex-col flex w-full bg-slate-950 rounded-xl h-[90%] mb-24">
-            <div className="flex w-full lg:w-[50%] flex-col gap-16 mt-16 overflow-scroll lg:pb-20 px-10 lg:px-14">
+          <div className="lg:min-h-screen lg:max-h-screen lg:flex-row flex-col flex w-full bg-slate-950 rounded-xl h-[90%] mb-10">
+            <div className="flex w-full lg:w-[50%] flex-col gap-16 my-8 overflow-scroll lg:pb-20 px-10 lg:px-14">
               <div className="w-full">
                 <Carousel>
                   <CarouselContent>
@@ -277,24 +275,31 @@ const WorkoutPlanComponent: React.FC = () => {
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
+                  {workoutPlans.length > 0 && (
+                    <>
+                      <CarouselPrevious />
+                      <CarouselNext />
+                    </>
+                  )}
                 </Carousel>
               </div>
             </div>
-            <div className="lg:w-[50%] flex items-center justify-center">
+            <div
+              className={`lg:w-[50%] flex justify-center overflow-scroll my-8 ${
+                workoutVideos.length == 0 ? "items-center" : ""
+              }`}
+            >
               <FadeIn width="100%" direction="bottom" delay={0.75}>
                 <div className="flex flex-col items-center w-full">
                   {workoutVideos.length > 0 ? (
                     <>
                       {workoutVideos.map((video, index) => (
                         <div key={index} className="mb-4">
-                          <h4 className="text-center text-lg">
+                          <h4 className="text-center text-lg w-[400px] md:w-[450px] xl:w-[500px]">
                             {video.snippet.title}
                           </h4>
                           <iframe
-                            width="560"
-                            height="315"
+                            className=" w-[400px] md:w-[450px] xl:w-[500px] aspect-video"
                             src={`https://www.youtube.com/embed/${video.id.videoId}`}
                             title="YouTube video player"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -307,7 +312,7 @@ const WorkoutPlanComponent: React.FC = () => {
                         onClick={() =>
                           window.open(
                             `https://www.youtube.com/results?search_query=${searchQuery}`,
-                            "_blank",
+                            "_blank"
                           )
                         }
                       >
@@ -320,6 +325,11 @@ const WorkoutPlanComponent: React.FC = () => {
                 </div>
               </FadeIn>
             </div>
+          </div>
+          <div className="flex justify-center mb-24">
+            <Button onClick={() => onBack()} variant="secondary">
+              Return to Start
+            </Button>
           </div>
         </div>
       </FadeIn>

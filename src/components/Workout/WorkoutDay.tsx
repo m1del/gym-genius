@@ -1,3 +1,4 @@
+import Typewriter from "../../components/ui/TypeWriter";
 interface Exercise {
   name: string;
   description: string;
@@ -23,12 +24,36 @@ export default function WorkoutDay({
   return (
     <div>
       <div className="flex flex-col items-center">
-        <h1 className="text-2xl font-semibold mb-1">{day}</h1>
-        <h2 className="pb-8">{name}</h2>
+        <h1 className="text-2xl font-semibold mb-1">
+          <Typewriter
+            words={[`${day}`]}
+            delay={25}
+            infinite={false}
+          ></Typewriter>
+        </h1>
+        <h2 className="pb-8">
+          <Typewriter
+            words={[`${name}`]}
+            delay={25}
+            infinite={false}
+          ></Typewriter>
+        </h2>
       </div>
       <h2 className="font-semibold text-xl mb-1">Warmup:</h2>
-      <p className="text-lg mb-8">{warm_up}</p>
-      <h2 className="font-semibold text-xl mb-1">Main Exercises:</h2>
+      <p className="text-lg mb-8">
+        <Typewriter
+          words={[`${warm_up}`]}
+          delay={25}
+          infinite={false}
+        ></Typewriter>
+      </p>
+      <h2 className="font-semibold text-xl mb-1">
+        <Typewriter
+          words={["Main Exercises:"]}
+          delay={25}
+          infinite={false}
+        ></Typewriter>
+      </h2>
       <div className="flex flex-col gap-1 mb-8">
         {exercises != null &&
           exercises.map((exercise, index) => (
@@ -40,7 +65,11 @@ export default function WorkoutDay({
                 console.log(exercises);
               }}
             >
-              {exercise.name}: {exercise.description}
+              <Typewriter
+                words={[`${exercise.name}: ${exercise.description}`]}
+                delay={25}
+                infinite={false}
+              ></Typewriter>
             </p>
           ))}
       </div>
@@ -52,7 +81,13 @@ export default function WorkoutDay({
           notes.map((note, index) => (
             <div>
               <p className="text-lg" key={index}>
-                {note}
+                {
+                  <Typewriter
+                    words={[note]}
+                    delay={25}
+                    infinite={false}
+                  ></Typewriter>
+                }
               </p>
               <br />
             </div>
